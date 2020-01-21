@@ -1,11 +1,11 @@
 # Site settings
-author: sergio marelli
-title: 
+author: Sergio Marelli
+title: Sergio Sharing
 header-img: img/home-bg.png
 email: sergio.mrll@gmail.com
-copyright_name: sergio marelli
+copyright_name: Sergio Marelli
 description: > # this means to ignore newlines until "baseurl:"
-  
+  Design looking for Code
 baseurl: "" # the subpath of your site, e.g. /blog
 twitter_username: 
 github_username:  AskBid
