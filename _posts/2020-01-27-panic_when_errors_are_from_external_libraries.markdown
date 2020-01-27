@@ -6,7 +6,7 @@ permalink:  panic_when_errors_are_from_external_libraries
 ---
 
 
-#### I usually don't fear errors. 
+## I usually don't fear errors. 
 I don't fear errors when they come from my own code. Solving them is like the satisfaction of removing a little stone from your shoe, or eventually inserting that USB stick when you understand it was the other way around.
 You know you can solve it, you know the field where the battle will happen, you know that victory is near and it will be satisfying. 
 Read that error message, and the pleasure begins, your brain already identifies many possible issues, you feel a genius, you are James Bond, Sherlock Holmes, Dr House... nothing can stop you! 
@@ -14,7 +14,7 @@ Read that error message, and the pleasure begins, your brain already identifies 
 
 But today after three months of victorius tests, and project creation I feel beaten. stuck in the most innocuous SQL test.
 
-#### What is different? 
+## What is different? 
 
 This time the error doesn't come from my code, it doesn't even come from the Rspec Test, it comes from an external library.
 No more stone in the shoe or stuck USB stick, It is like being dropped in the middle of a foreign ostile city without knowing the local language.
@@ -39,6 +39,7 @@ Failures:
      # /Users/sergio/.rvm/gems/ruby-2.6.1/gems/sqlite3-1.3.13/lib/sqlite3/database.rb:91:in `prepare'
      # /Users/sergio/.rvm/gems/ruby-2.6.1/gems/sqlite3-1.3.13/lib/sqlite3/database.rb:137:in `execute'
      # ./spec/select_spec.rb:14:in `block (2 levels) in <top (required)>'
+		 
 ```
 
 
@@ -46,7 +47,7 @@ There isn't an output that mismatches what the test expects, instead it seems th
 
 What does that `"near "Write": syntax error"` even mean??
 
-#### My Process
+## My Process
 
 First thing I try to replicate what the test is supposedly trying to gather from my table (at this point two files - create.sql and insert.sql - were created from me, in previous tests, to initialize the table from .sql files during the tests)
 ```
@@ -78,6 +79,7 @@ def prepare sql
         stmt.close unless stmt.closed?
       end
     end
+		
 ```
 After a little look inside the `.../sqlite3/statement.rb` and realized there was not even an #initialize that supposedly was creating the problem I gave up.
 
@@ -93,6 +95,7 @@ And a little look through the file I find the inciminated function
 def selects_all_female_bears_return_name_and_age
   "Write your SQL query here"
 end
+
 ```
 WOW! I bet that "Write" is the same mysterious one appearing in the error, I susbstitute the first word of the string, run the test, and yes that's it.
 
@@ -103,6 +106,7 @@ I do it and this time a juicy understandable failure from the Rspec Test iteself
 ```
 expected: [["Tabitha", 6], ["Melissa", 13], ["Wendy", 6]]
             got: []
+						
 ```
 
 I need to put the gender as 'F' and not 'female'... ahhh this is satisfaction :)
