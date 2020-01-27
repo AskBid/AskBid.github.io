@@ -1,7 +1,7 @@
 ---
 layout: post
-title:      "PANIC: When Errors are From External Libraries"
-date:       2020-01-27 21:44:25 +0000
+title:      "When Errors are From External Libraries"
+date:       2020-01-27 16:44:25 -0500
 permalink:  panic_when_errors_are_from_external_libraries
 ---
 
