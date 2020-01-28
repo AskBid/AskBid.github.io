@@ -19,7 +19,7 @@ But today after three months of victorius tests, and project creation I feel bea
 This time the error doesn't come from my code, it doesn't even come from the Rspec Test, it comes from an external library.
 No more stone in the shoe or stuck USB stick, It is like being dropped in the middle of a foreign ostile city without knowing the local language.
 
-Even when the problem is from the tests, you receive an expect/received clear statement of what is wrong so the path to the solution is always quite a structured process.
+Even when the problem is from the Rspec Test, you will receive an expect/got clear statement of what is wrong, so the path to the solution is always quite of a structured process.
 
 What I get this time instead is the following:
 
@@ -43,13 +43,13 @@ Failures:
 ```
 
 
-There isn't an output that mismatches what the test expects, instead it seems there is an error occuring inside the sqlite3 library.
+There isn't an output that mismatches what the test expected, instead it seems there is an error occuring inside the sqlite3 library.
 
 What does that `"near "Write": syntax error"` even mean??
 
 ## My Process
 
-First thing I try to replicate what the test is supposedly trying to gather from my table (at this point two files - create.sql and insert.sql - were created from me, in previous tests, to initialize the table from .sql files during the tests)
+First thing I try to replicate what the test is supposedly trying to gather from my table (at this point two files - *create.sql* and *insert.sql* - were created from me, in previous tests, so to initialize the table from .sql files during the tests)
 ```
 sqlite> select * from bears;
 
@@ -60,14 +60,17 @@ Tabitha     6
 Melissa     13        
 Wendy       6         
 sqlite> 
+
 ```
 
-OK, my table is fine, why is it that the test doesn't get the expected result but a `SQLite3::SQLException` instead?
-Reading the error origins I realise I have to open that `.../sqlite3/database.rb` at line 137 to figure out what was going wrong.
+OK, my table is correct, but the test doesn't get the expected result, a `SQLite3::SQLException` shows up instead.
+I told the tests are using SQL queries to verify the validity of the 'bear' table created via my sql files.
 
-And here the panic started.. oh dear... where they still writing in ruby in there? things were very complicated to understand and a lot of never seen trickery was going on in that code... I would have never been able to figure out what was going wrong.. I could not even understand how the arguments were given in that #execute that seems to trigger the exception in the test... what is this`def execute sql, bind_vars = [], *args, &block` !?!?
+Reading the error origins I realise I have to open that `.../sqlite3/database.rb` at line 137 to figure out what is going wrong.
+And here the panic starts.. oh dear... are they still writing in ruby in there? 
+Things are very complicated to understand and a lot of never seen trickery is going on in this code... I would never be able to figure out what is going wrong.. I can not even understand how the arguments are given in this #execute that seems to trigger the exception in the test... what is this`def execute sql, bind_vars = [], *args, &block` !?!?
 
-line 137 leads me to another function, #prepare:
+line 137 leads me to another method, #prepare:
 ```
 def prepare sql
       stmt = SQLite3::Statement.new( self, sql )
@@ -81,27 +84,29 @@ def prepare sql
     end
 		
 ```
-After a little look inside the `.../sqlite3/statement.rb` and realized there was not even an #initialize that supposedly was creating the problem I gave up.
 
-Nevertheless I understood there was an initialization failing and that #execute is not some sort of metaprogramming that from the string 'selects_all_female_bears_return_name_and_age' executes an SQL query on my table, as in the first panic I thought... 
-inside the code of the sqlite3 library the subject was a string with the query itself, something like "select * from table where a=? and b=?" that was the input of #execute.. not some sort of string!
+After a little look inside the `.../sqlite3/statement.rb` I realize there is not even an #initialize that supposedly is creating the problem.. I give up.
 
-Wait a moment !  'selects_all_female_bears_return_name_and_age' is not even a string.. is given as a method!
+Nevertheless I understood there was an initialization failing and that #execute is not some sort of metaprogramming that from the string `'selects_all_female_bears_return_name_and_age'` executes an SQL query on my table, as in the first panic I thought... 
+inside the code of the sqlite3 library the subject was a string with the query itself, something like `"select * from table where a=? and b=?"` that was the input of #execute.. not some sort of string!
 
-Oh my.. now I understand, reading above I see that this tests is not even testing a database that comes from my insert.sql, they are actually only interested in testing some function that I am supposed to write.
+Wait a moment !  the input in `@db.execute(selects_all_female_bears_return_name_and_age))` is not even a string!! is given as a method!
 
-And a little look through the file I find the inciminated function
+Oh my.. now I understand, reading the beginning of the test I understand that the tested database doesn't even come from my* insert.sql*, they are actually only testing some method that I am supposed to write.
+
+And a little look through the files I find the incriminated function in *sql_queries.rb*:
 ```
 def selects_all_female_bears_return_name_and_age
   "Write your SQL query here"
 end
 
 ```
-WOW! I bet that "Write" is the same mysterious one appearing in the error, I susbstitute the first word of the string, run the test, and yes that's it.
+WOW! I bet that that "Write" in  "Write your SQL query here" is the same mysterious one appearing in the error.
+I susbstitute the first word of the string, run the test, and yes, that's it.
 
-I simply didn't read the README and got the test wrong, I need just to put some simple SQL query string as return value in that function.
+I simply didn't read the README and got the test wrong, I need just to put some simple SQL query string as return value in that function. It is not about the table created from my previous sql files.
 
-I do it and this time a juicy understandable failure from the Rspec Test iteself appears:
+I complete the method #selects_all_female_bears_return_name_and_age and this time a juicy understandable failure from the Rspec Test iteself appears:
 
 ```
 expected: [["Tabitha", 6], ["Melissa", 13], ["Wendy", 6]]
@@ -109,7 +114,7 @@ expected: [["Tabitha", 6], ["Melissa", 13], ["Wendy", 6]]
 						
 ```
 
-I need to put the gender as 'F' and not 'female'... ahhh this is satisfaction :)
+I need to put the gender as "F" and not "female"... ahhh this is satisfaction :)
 
 I feel I complicated things, but it was a useful lesson.
 
