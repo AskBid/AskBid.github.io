@@ -116,6 +116,11 @@ expected: [["Tabitha", 6], ["Melissa", 13], ["Wendy", 6]]
 
 I need to put the gender as "F" and not "female"... ahhh this is satisfaction :)
 
-I feel I complicated things, but it was a useful lesson.
+I feel I complicated things, but it was a useful lesson. 
+This bit `SQLite3::SQLException:` was saying it all, but I didn't have clear what an SQL was neither an exception, now I know.
+
+
+
+
 
 
