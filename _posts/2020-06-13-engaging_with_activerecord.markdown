@@ -5,23 +5,27 @@ date:       2020-06-13 04:37:13 -0400
 permalink:  engaging_with_activerecord
 ---
 
-
 After all the labs I figured that I wasn't still truly getting ActiveRecord, in particular *associations*.
 
-I thought that if things are too simple I can pass labs by rule-of-thumb, like you can solve some algebraic math formula just following a few tricks seen on the whiteboard, switching things around but without truly understanding what those actions mean.
+I thought that if things are too simple I can pass labs by rule-of-thumb, like you can solve some algebraic math formula  following a few tricks seen on the whiteboard, switching things around but without truly understanding what those actions mean.
 
-For that reason I decided to make my life difficult in this project, so that no tricks could make things work, because now I had something specific to model rather than a given clear drill that unfolds to the target almost by itself.
+To make the path more worthy I went for something  more  specific to model rather than a given clear drill that unfolds to the target smoothly.
 Now I was truly engaged in understanding ActiveRecord.
 
 ## The Subject: an Intro to Cardano
 Cardano is a blockchain in which the ledger that records transactions is maintained from competing Pools.
-In Cardano time is divided by Epochs, each Epochs has something like >20k slots, for each slot one Pool can produce a block. For each block produced the Pool gets a reward in native coins.
+
+In Cardano time is divided by Epochs, each Epoch has something like >20k slots. 
+For each slot one Pool can produce a block. 
+For each block produced the Pool gets a reward in the form of native coins.
 Pools have to win a lottery for each slot that they get to produce.
 Pools have more chances to win the lottery the more coins they have.
-Now the fun thing: each coin holder in the Cardano ecosystem (the User) can delegate their coins to a certain Pool so to give that Pool more chances to win in each lottery for each slot.
-By doing so the User will get a reward proportional to his delegation.
 
-The User has then a decision to make, which Pool will he give his money? the more performing his pool will be, the more performing his delegation will be as well.
+Now the fun thing, each coin holder in the Cardano ecosystem (the User) can delegate their coins to a certain Pool so to give that Pool more chances to win in each lottery.
+By doing so the User will get a reward proportional to his delegation in case his pool gets to produce blocks.
+
+The User has then a decision to make, which Pool will he give his money? 
+The more performing his pool will be, the more performing his delegation will be as well.
 
 With Doubtful-Delegator (my project app) a User can select a group of pools he has delegated to and a group of Pools he wants to track. 
 During the course of an epoch he can now compare the performance of the actual delegations and the performance of "would be" delegations.
