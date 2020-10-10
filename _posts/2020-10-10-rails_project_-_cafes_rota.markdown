@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "Rails Project - Cafes Rota"
-date:       2020-10-10 21:52:35 +0000
+date:       2020-10-10 17:52:36 -0400
 permalink:  rails_project_-_cafes_rota
 ---
 
@@ -10,7 +10,7 @@ The app can then propose to the User the Cafes that haven't been visited for lon
 
 I started this project from drafting the database schema on draw.io
 
-![draw.io](https://ibb.co/1RBv10S)
+![draw.io](https://i.postimg.cc/tJJsZ3CL/cafes.jpg)
 
 Here I came to the realisation that for an Object to have an array as an attribute it is actually required to have an all new table. Now after the project is almost done it seems obvious, but it wasn't that intuitive at first.
 
