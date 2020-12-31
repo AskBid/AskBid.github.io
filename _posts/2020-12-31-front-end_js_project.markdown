@@ -21,7 +21,7 @@ Because each `Stake` address can be delegated to a different `Pool` for each epo
 Once the User has selected the `Stake` addresses he wants to track, he can then select to follow several `Pools`. The association of the followed `Pools` is that of `many_to_many`. 
 <br><br>
 Here is a flow chart of the schema of the database that should summarise the architecture I thought for this project's DB:
-![](https://raw.githubusercontent.com/AskBid/delegation-explorer/main/fow-chart.jpg)
+![](https://raw.githubusercontent.com/AskBid/delegation-explorer/main/flow-chart.jpg)
 <br><br>
 Once the `User` enters a `Stake` a `fetch` POST request is sent to the backend where the `Stake` is assigned to the `User`. The `render()` is triggered once the POST request *promise* has been fulfilled. 
 The `render()` function sends two GET requests to the beackend, one checks for `ActiveStake`s that have an `:epochno` as selected in the frontend interface, and the other function checks for all the `Pool`s associated with the current `User`.
